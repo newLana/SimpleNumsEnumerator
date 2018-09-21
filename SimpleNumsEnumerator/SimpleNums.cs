@@ -19,10 +19,7 @@ namespace SimpleNumsEnumerator
             innerArray = new int[array.Length];
             Array.Copy(array, innerArray, array.Length);
         }
-        public IEnumerator GetEnumerator()
-        {
-            return new SimpleNumsEnumerator(innerArray);
-        }
+        public IEnumerator GetEnumerator() => new SimpleNumsEnumerator(innerArray);
     }
 
     class SimpleNumsEnumerator : IEnumerator
