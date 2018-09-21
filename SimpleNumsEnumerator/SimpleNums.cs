@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SimpleNumsEnumerator
@@ -19,20 +20,24 @@ namespace SimpleNumsEnumerator
             innerArray = new int[array.Length];
             Array.Copy(array, innerArray, array.Length);
         }
-        public IEnumerator GetEnumerator() => new SimpleNumsEnumerator(innerArray);
+
+        public IEnumerator<int> GetEnumerator() => new SimpleNumsEnumerator(innerArray);
     }
 
-    class SimpleNumsEnumerator : IEnumerator
+    class SimpleNumsEnumerator : IEnumerator<int>
     {
         private int[] innerArray { get; set; }
+        
         int position = -1;
 
-        public SimpleNumsEnumerator(int[] nums)
+        public int Current => innerArray[position];
+
+        object IEnumerator.Current => innerArray[position];
+
+        public SimpleNumsEnumerator(IEnumerable<int> nums)
         {
             innerArray = nums.Where(n => IsSimple(n)).ToArray();
         }       
-
-        object IEnumerator.Current => innerArray[position];
 
         public bool MoveNext() => ++position < innerArray.Length;
 
@@ -50,5 +55,40 @@ namespace SimpleNumsEnumerator
             }
             return true;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~SimpleNumsEnumerator() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
